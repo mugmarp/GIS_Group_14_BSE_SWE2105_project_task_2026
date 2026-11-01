@@ -83,7 +83,7 @@ See **[FEASIBILITY_ANALYSIS.md](FEASIBILITY_ANALYSIS.md)** for the complete anal
 
 ---
 
-## Suggested 6-Week Plan (if Option 2 chosen)
+## Suggested Plan (if Option 2 chosen)
 
 | Week | Focus | Deliverable |
 |------|-------|-------------|
