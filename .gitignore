@@ -1,0 +1,18 @@
+# Build outputs
+build/
+*.apk
+*.aab
+*.ap_
+
+# IDE
+.idea/
+*.iml
+local.properties
+.gradle/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Personal research (not for submission)
+internal/

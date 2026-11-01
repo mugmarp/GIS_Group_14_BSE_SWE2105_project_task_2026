@@ -36,11 +36,18 @@ When recording a decision, use this format:
 
 ### 2026-11-01 Decision: Project Option Selection
 
-**Status:** Proposed (awaiting group discussion)
+**Status:** Accepted
 
 **Context:** The project task requires choosing between two tracking approaches:
 - Option 1: Laptop tracking via IP address
 - Option 2: Person tracking via mobile phone (GPS/cell/WiFi)
+
+**Additional Uganda Context:** See `PROBLEM_CONTEXT.md` for detailed research on Uganda-specific problems this could address:
+- **Boda boda safety crisis**: 50,000-80,000 drivers in Kampala; fatalities doubled 2011-2015; 10-20 trauma cases daily at Mulago; 41% of trauma ward patients from moto-taxi accidents; 10,000+ motorcycles stolen annually
+- **Vehicle theft**: 999 motor vehicles stolen in 2024; 91% recovery rate with digital tracking (police ITMS); government mandating GPS trackers on all vehicles (controversial, privacy concerns)
+- **Child/school transport safety**: Uganda Police safe transport guidelines; "2 school children lost daily"; National Safe School Zones Guide 2025; authorities proposing real-time monitoring
+- **Mobile landscape**: Android ~70%+ market share; Samsung leading vendor; MTN/Airtel 4G nationwide, 5G in major cities (NSA); smartphone penetration ~15-25% (cost barrier ~UGX 350k); SafeBoda/Bolt/Uber have trip-sharing features
+- **Existing solutions**: SafeBoda (ride-hailing + tracking + "zero data" mode), Bolt, Faras, commercial fleet trackers (Proxi, BlackKnight), government ITMS
 
 **Options Considered:**
 1. **Option 1: IP Address Tracking**
@@ -50,45 +57,64 @@ When recording a decision, use this format:
    - Pros: True real-time tracking (1 Hz GPS); meter-level accuracy outdoors; indoor via WiFi; demonstrates mobile dev, sensor fusion, battery optimization, geospatial viz
    - Cons: Higher complexity; requires physical device testing; background location permissions tricky
 
-**Decision:** [TO BE DECIDED BY GROUP]
+**Decision:** Option 2 — Mobile Phone Tracking (GPS/Cell/WiFi)
 
-**Rationale:** [TO BE FILLED AFTER DISCUSSION]
+**Rationale:** 
+- Meets the core "real-time tracking" requirement; IP-based fundamentally cannot
+- Aligns with Uganda's actual problems: boda boda safety, vehicle theft, child transport, family safety
+- Android dominant in Uganda (~70%+), Kotlin/Compose gives full sensor access including raw cell tower data
+- Portfolio value: demonstrable mobile app with map, trails, export — beats static IP lookup
+- Zero cost: FusedLocationProvider, OSM/MapLibre, Firebase free tier all work in Uganda
+- Testable on real devices: team can collect actual GPS traces in Kampala/Mbarara, measure accuracy vs ground truth
 
 **Consequences:**
-- If Option 1: Simpler 2-3 week project, but may not meet "real-time tracking" requirement
-- If Option 2: 4-6 week project with substantial portfolio value, meets all requirements
+- 4-6 week project with appropriate engineering complexity for SWE2105
+- Requires Android devices for testing (team should verify availability)
+- Need to design for Ugandan constraints: intermittent connectivity, battery sensitivity, cost-conscious users, privacy awareness (government tracker mandate backlash)
 
 **Action Items:**
-- [ ] All members read `FEASIBILITY_ANALYSIS.md`
-- [ ] Group meeting to discuss and vote
-- [ ] Record final decision here
-- [ ] Initialize project scaffold based on choice
+- [x] All members read `FEASIBILITY_ANALYSIS.md` and `PROBLEM_CONTEXT.md`
+- [x] Record final decision here
+- [ ] Initialize Android/Kotlin/Compose project scaffold (Week 1)
+- [ ] Define target problem from Uganda context (boda boda safety? school transport? vehicle anti-theft? family safety?)
+- [ ] Update Decision Index below
 
 ---
 
-### [DATE] Decision: Target Platform
+### 2026-11-01 Decision: Target Platform
 
-**Status:** Pending (depends on Option 2 selection)
+**Status:** Accepted
 
-**Context:** If Option 2 chosen, need to pick development platform.
+**Context:** Option 2 selected (Mobile Phone Tracking). Need to pick development platform for Uganda context.
 
 **Options Considered:**
-1. **Android (Kotlin + Jetpack Compose)** — Full sensor access (`TelephonyManager.getAllCellInfo()`), free tools, free maps (OSM/MapLibre), direct device testing
-2. **iOS (Swift + SwiftUI)** — Polish, but no raw cell tower API, $99/yr dev account for device testing, Mac required
-3. **Flutter (Dart)** — Cross-platform, but limited background location on iOS, platform channels needed for raw cell info
+1. **Android (Kotlin + Jetpack Compose)** — Full sensor access (`TelephonyManager.getAllCellInfo()`), free tools, free maps (OSM/MapLibre), direct device testing, **Android ~70%+ in Uganda**, Samsung leading vendor, team likely has Android devices
+2. **iOS (Swift + SwiftUI)** — Polish, but no raw cell tower API, $99/yr dev account for device testing, Mac required, low iOS share in Uganda
+3. **Flutter (Dart)** — Cross-platform, but limited background location on iOS, platform channels needed for raw cell info, adds complexity
 4. **React Native (TypeScript)** — Cross-platform, same iOS limitations, Expo managed workflow simplifies but ejects for background
-5. **Web (PWA, Leaflet/MapLibre GL JS)** — Cross-platform, zero install, Browser Geolocation API (fused), but no background tracking, no raw cell access
+5. **Web (PWA, Leaflet/MapLibre GL JS)** — Cross-platform, zero install, Browser Geolocation API (fused), but no background tracking, no raw cell access, requires reliable internet
 
-**Decision:** [TO BE DECIDED]
+**Decision:** Android (Kotlin + Jetpack Compose)
 
-**Rationale:** [TO BE FILLED]
+**Rationale:** 
+- Uganda market: Android dominant (~70%+), Samsung leading vendor — matches user base
+- Full sensor access: `TelephonyManager.getAllCellInfo()` for raw cell tower data (requirement discusses cell tower triangulation)
+- Free tooling: Android Studio, Gradle, Kotlin, Compose — no Mac needed, no $99/yr fee
+- Team skills: BSE students likely have Java/Kotlin exposure; Compose is modern declarative UI
+- Offline-first: Works without constant internet (critical for Uganda intermittent connectivity)
+- Background tracking: Foreground Service + `ACCESS_BACKGROUND_LOCATION` fully supported
+- Testing: Direct device testing on team phones; no simulator limitations
 
-**Consequences:** Affects library choices, testing strategy, team skill requirements
+**Consequences:** 
+- Single-platform (Android) — acceptable for student project; web viewer can be added later for cross-platform dashboard
+- Compose learning curve if team new to it; but better long-term than XML
+- Map library choice now Compose-compatible (osmdroid Compose wrapper or MapLibre Compose)
 
 **Action Items:**
-- [ ] Assess team skills (Kotlin/Swift/Dart/JS)
-- [ ] Check device availability (Android phones, iPhones, Macs)
-- [ ] Decide and record
+- [ ] Verify all team members have Android devices for testing (min API 24/Android 7.0)
+- [ ] Initialize project with Kotlin + Compose + Material3
+- [ ] Spike: test osmdroid vs MapLibre in Compose (see Map Library decision)
+- [ ] Set up GitHub Actions for CI builds (free, no local Gradle daemon issues)
 
 ---
 
@@ -190,8 +216,8 @@ When recording a decision, use this format:
 
 | Date | Decision | Status |
 |------|----------|--------|
-| 2026-11-01 | Project Option Selection | Proposed |
-| — | Target Platform | Pending |
+| 2026-11-01 | Project Option Selection | **Accepted** (Option 2) |
+| 2026-11-01 | Target Platform | **Accepted** (Android/Kotlin/Compose) |
 | — | Map Library | Pending |
 | — | Local Database | Pending |
 | — | Backend / Sync | Pending |
