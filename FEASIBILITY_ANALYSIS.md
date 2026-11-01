@@ -169,7 +169,7 @@
 
 ---
 
-## RECOMMENDATION: **Option 2 (Mobile Phone Tracking)**
+## DECISION: **Option 2 (Mobile Phone Tracking)** — **Accepted**
 
 ### Why Option 2 Wins
 | Criterion | Option 1 (IP) | Option 2 (Mobile) |
@@ -214,7 +214,7 @@
 
 ## FINAL VERDICT
 
-**Choose Option 2 (Mobile Phone GPS/Cell/WiFi Tracking)**
+**Decision: Option 2 (Mobile Phone GPS/Cell/WiFi Tracking)** — **Accepted**
 
 ### Rationale:
 1. **Technically feasible** for real-time tracking — GPS provides meter-level accuracy outdoors; fused provider handles indoor via WiFi

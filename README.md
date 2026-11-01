@@ -50,7 +50,7 @@ See **[FEASIBILITY_ANALYSIS.md](FEASIBILITY_ANALYSIS.md)** for the complete anal
 | **Cost** | Free APIs available | Free (OSM/MapLibre, Firebase free tier) |
 | **Portfolio value** | Low | **High** |
 
-### Recommendation: **Option 2 (Mobile Phone Tracking)**
+### Decision: **Option 2 (Mobile Phone Tracking)** — **Accepted**
 
 **Rationale:**
 1. Actually enables **real-time tracking** — the core requirement
@@ -63,10 +63,9 @@ See **[FEASIBILITY_ANALYSIS.md](FEASIBILITY_ANALYSIS.md)** for the complete anal
 
 ## Group Decision
 
-**Status:** ⬜ Pending group discussion  
-**Chosen Option:** [To be decided]  
-**Platform:** [Android / iOS / Web / Cross-platform]  
-**Tech Stack:** [To be decided]
+**Status:** ✅ **Accepted** (Option 2: Mobile Phone Tracking)  
+**Platform:** ✅ **Accepted** (Android / Kotlin / Jetpack Compose)  
+**Tech Stack:** [To be decided per remaining decisions in `DECISION_LOG.md`]
 
 *Update `DECISION_LOG.md` once the group agrees on direction.*
 
@@ -75,11 +74,10 @@ See **[FEASIBILITY_ANALYSIS.md](FEASIBILITY_ANALYSIS.md)** for the complete anal
 ## Next Steps
 
 1. **Read** `FEASIBILITY_ANALYSIS.md` — understand both options deeply
-2. **Discuss** as a group — weigh learning goals vs. implementation effort
-3. **Decide** on Option 1 or 2, and platform (Android recommended for full sensor access)
-4. **Document** decision in `DECISION_LOG.md`
-5. **Initialize** project scaffold (Week 1 milestone)
-6. **Build** incrementally per the 6-week plan in the analysis
+2. **Discuss** target problem (Family Safety Tracker vs others) — see `internal/target-problems.md`
+3. **Resolve remaining decisions** in `DECISION_LOG.md` (Map Library, Database, Backend, Background Strategy)
+4. **Initialize** project scaffold (Week 1 milestone)
+5. **Build** incrementally per the 6-week plan in the analysis
 
 ---
 
