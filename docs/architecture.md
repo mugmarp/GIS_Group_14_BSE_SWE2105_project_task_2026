@@ -100,3 +100,61 @@ app/
 - [ ] Sync protocol (Firebase Realtime DB)
 - [ ] Privacy policy / data retention
 - [ ] Cell diagnostic screen (raw cell + OpenCellID comparison)
+
+---
+
+## Appendix: Verified Uganda Technical & Legal Constraints
+
+### Legal Framework (Primary Sources)
+
+| Act | Chapter | Key Provisions |
+|-----|---------|----------------|
+| **Uganda Communications Act 2013** | Chapter 103 | General telecom regulation; UCC licensing; operator obligations | [ULII](https://ulii.org/akn/ug/act/2013/1/eng@2013-01-18) |
+| **Regulation of Interception of Communications Act 2010** | Chapter 101 | Lawful interception — only authorized officers with warrant can intercept communications; telecoms must maintain interception capability | [ULII](https://ulii.org/akn/ug/act/2010/18/eng@2023-12-31) |
+| **Data Protection and Privacy Act 2019** | Chapter 97 | Location data = personal data (Sec 2); consent required (Sec 7); security measures mandatory (Sec 20); unlawful disclosure offence (Sec 35, up to 10 years) | [ULII](https://ulii.org/akn/ug/act/2019/9/eng@2019-05-03/source) |
+
+**Implications for Cell Tower Triangulation:**
+- **True triangulation (TDOA/AoA from 3+ towers)** requires access to MTN/Airtel internal network measurement systems — **not available to developers**
+- **Only law enforcement** (UPF, CMI, ISO) with **valid court warrant** can compel triangulation under Interception Act 2010
+- **No public API exists** — neither MTN nor Airtel exposes tower measurement data
+- **Location data is "personal data"** under DPPA 2019 — collecting/sharing without consent is an offence (Sec 35)
+
+### Telecom Developer APIs (Verified)
+
+| Operator | Public APIs | Location/Triangulation API? |
+|----------|-------------|----------------------------|
+| **MTN Uganda** | Mobile Money only | ❌ No |
+| **Airtel Uganda** | Airtel Money only | ❌ No |
+
+*Sources: [MTN Open API](https://www.mtn.co.ug/helppersonal/mtn-open-api/), [Airtel Developer Portal](https://developers.airtel.africa/)*
+
+### OpenCellID Uganda Coverage
+
+| Metric | Value |
+|--------|-------|
+| **MCC (Uganda)** | 641 ([ITU E.212](https://www.itu.int/dms_pub/itu-t/opb/sp/T-SP-E.212B-2014-PDF-E.pdf)) |
+| **MTN Uganda** | MNC 10 (PLMN 64110) — GSM/UMTS/LTE |
+| **Airtel Uganda** | MNC 22 (PLMN 64122) — GSM/UMTS |
+| **CellMapper** | Crowd-sourced tower maps for [MTN](https://www.cellmapper.net/map?MCC=641&MNC=10) & [Airtel](https://www.cellmapper.net/map?MCC=641&MNC=1) |
+| **OpenCellID** | Country CSV + API lookups — [downloads](https://www.opencellid.org/downloads.php) (free token required) |
+
+**Estimated Accuracy (tower density):**
+- Kampala (dense): ~200m–1km
+- Regional towns: ~1–5km
+- Rural (Karamoja, villages): ~5–20km+
+
+*ResearchGate: Uganda avg 0.40 towers/km² (highly urban-skewed)*
+
+### Cell ID Lookup vs True Triangulation — Our Implementation
+
+| Approach | Feasibility | Accuracy | Legal |
+|----------|-------------|----------|-------|
+| **True triangulation (TDOA/AoA)** | ❌ Impossible — no telecom API, requires warrant | N/A | Illegal without warrant |
+| **Cell ID Lookup (CID + OpenCellID)** | ✅ `TelephonyManager.getAllCellInfo()` + OpenCellID API | Kampala 200m–1km; Rural 5–20km | ✅ Legal — public DB + on-device CID |
+| **Google FusedLocationProvider (Cell fallback)** | ✅ Built into Play Services | Similar (Google's proprietary cell DB) | ✅ Legal — user consents to location permission |
+
+**Our Strategy:**
+1. **Primary:** `FusedLocationProviderClient` with adaptive priority (Google handles GPS+WiFi+Cell fusion)
+2. **Educational/Diagnostic:** `TelephonyManager.getAllCellInfo()` → extract MCC/MNC/LAC/CID → query OpenCellID API → display "Cell ID Lookup" position vs Fused position
+3. **No triangulation math** — OpenCellID server returns tower coordinates; we display serving cell's location
+4. **Report discusses:** "True triangulation vs Cell ID Lookup — legal/technical reality in Uganda"
