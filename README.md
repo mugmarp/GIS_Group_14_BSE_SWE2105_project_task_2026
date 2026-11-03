@@ -104,9 +104,7 @@ All sources cited in `FEASIBILITY_ANALYSIS.md` including:
 
 ---
 
-## Contact
-
-**Group 14 Members:**
-- [Add member names and GitHub handles]
+## Group Members :
+- [member names and GitHub handle]
 
 **Repository:** https://github.com/mugmarp/GIS_Group_14_BSE_SWE2105_project_task_2026
